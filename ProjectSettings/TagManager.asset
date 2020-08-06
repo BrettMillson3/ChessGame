@@ -9,7 +9,9 @@ TagManager:
   - Knight
   - Bishop
   - Queen
-  - king
+  - King
+  - WhitePawn
+  - BlackPawn
   layers:
   - Default
   - TransparentFX
