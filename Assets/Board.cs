@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Board : MonoBehaviour
 {
@@ -33,6 +34,9 @@ public class Board : MonoBehaviour
 
     bool whiteTurn = true;
     bool playing = true;
+    bool correctPlayer = false;
+
+    public Text textTurn;
 
     // Start is called before the first frame update
     void Start()
@@ -44,17 +48,17 @@ public class Board : MonoBehaviour
             {
                 if (x * 8 + y < 16) {
                     board[x, y] = pieces.transform.GetChild(0).GetChild(x * 8 + y).gameObject;
-                    Debug.Log(board[x, y]);
+                   // Debug.Log(board[x, y]);
                 }
                 else if (x * 8 + y > 47)
                 {
                     board[x, y] = pieces.transform.GetChild(1).GetChild((x - 6) * 8 + y).gameObject;
-                    Debug.Log(board[x, y]);
+                  //  Debug.Log(board[x, y]);
                 }
                 else
                 {
                     board[x, y] = null;
-                    Debug.Log(board[x, y]);
+                 //   Debug.Log(board[x, y]);
                 }
 
             }
@@ -65,124 +69,171 @@ public class Board : MonoBehaviour
 
     private void Update()
     {
+        if (whiteTurn)
+        {
+            textTurn.text = "White";
+        }
+        else
+        {
+            textTurn.text = "Black";
+        }
         if (Input.GetButtonDown("Fire1") && highlightedPiece != null && playing)
         {
-            Vector2 distanceToMouse = new Vector2(highlightedPiece.transform.position.x - Camera.main.ScreenToWorldPoint(Input.mousePosition).x, highlightedPiece.transform.position.y - Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
-            int numberOfMovesX = 0;
-            int numberOfMovesY = 0;
-            float currentDistanceX = 0;
-            float currentDistanceY = 0;
-            if (distanceToMouse.x > 0)
+            if (correctPlayer)
             {
-                xPos = true;
-                while (currentDistanceX < distanceToMouse.x)
+                Vector2 distanceToMouse = new Vector2(highlightedPiece.transform.position.x - Camera.main.ScreenToWorldPoint(Input.mousePosition).x, highlightedPiece.transform.position.y - Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
+                int numberOfMovesX = 0;
+                int numberOfMovesY = 0;
+                float currentDistanceX = 0;
+                float currentDistanceY = 0;
+                if (distanceToMouse.x > 0)
                 {
-                    if (numberOfMovesX == 0)
+                    xPos = true;
+                    while (currentDistanceX < distanceToMouse.x)
                     {
-                        currentDistanceX += distanceForCellX / 2;
-                    }
-                    else
-                    {
-                        currentDistanceX += distanceForCellX;
-                    }
-                    numberOfMovesX++;
-                    if (numberOfMovesX > 1000)
-                    {
-                        break;
+                        if (numberOfMovesX == 0)
+                        {
+                            currentDistanceX += distanceForCellX / 2;
+                        }
+                        else
+                        {
+                            currentDistanceX += distanceForCellX;
+                        }
+                        numberOfMovesX++;
+                        if (numberOfMovesX > 1000)
+                        {
+                            break;
+                        }
                     }
                 }
-            }
-            else
-            {
-                xPos = false;
-                while (currentDistanceX > distanceToMouse.x)
+                else
                 {
-                    if (numberOfMovesX == 0)
+                    xPos = false;
+                    while (currentDistanceX > distanceToMouse.x)
                     {
-                        currentDistanceX -= distanceForCellX / 2;
-                    }
-                    else
-                    {
-                        currentDistanceX -= distanceForCellX;
-                    }
-                    numberOfMovesX++;
-                    if (numberOfMovesX > 1000)
-                    {
-                        break;
+                        if (numberOfMovesX == 0)
+                        {
+                            currentDistanceX -= distanceForCellX / 2;
+                        }
+                        else
+                        {
+                            currentDistanceX -= distanceForCellX;
+                        }
+                        numberOfMovesX++;
+                        if (numberOfMovesX > 1000)
+                        {
+                            break;
+                        }
                     }
                 }
-            }
-            if (distanceToMouse.y > 0)
-            {
-                yPos = true;
-                while (currentDistanceY < distanceToMouse.y)
+                if (distanceToMouse.y > 0)
                 {
-                    if (numberOfMovesY == 0)
+                    yPos = true;
+                    while (currentDistanceY < distanceToMouse.y)
                     {
-                        currentDistanceY += distanceForCellY / 2;
-                    }
-                    else
-                    {
-                        currentDistanceY += distanceForCellY;
-                    }
-                    numberOfMovesY++;
-                    if (numberOfMovesY > 1000)
-                    {
-                        break;
+                        if (numberOfMovesY == 0)
+                        {
+                            currentDistanceY += distanceForCellY / 2;
+                        }
+                        else
+                        {
+                            currentDistanceY += distanceForCellY;
+                        }
+                        numberOfMovesY++;
+                        if (numberOfMovesY > 1000)
+                        {
+                            break;
+                        }
                     }
                 }
-            }
-            else
-            {
-                yPos = false;
-                while (currentDistanceY > distanceToMouse.y)
+                else
                 {
-                    if (numberOfMovesY == 0)
+                    yPos = false;
+                    while (currentDistanceY > distanceToMouse.y)
                     {
-                        currentDistanceY -= distanceForCellY / 2;
-                    }
-                    else
-                    {
-                        currentDistanceY -= distanceForCellY;
-                    }
-                    numberOfMovesY++;
-                    if (numberOfMovesY > 1000)
-                    {
-                        break;
+                        if (numberOfMovesY == 0)
+                        {
+                            currentDistanceY -= distanceForCellY / 2;
+                        }
+                        else
+                        {
+                            currentDistanceY -= distanceForCellY;
+                        }
+                        numberOfMovesY++;
+                        if (numberOfMovesY > 1000)
+                        {
+                            break;
+                        }
                     }
                 }
+                numberOfMovesX--;
+                numberOfMovesY--;
+                if (highlightedPiece.transform.tag == "Rook")
+                {
+                    if(MoveRook(numberOfMovesX, numberOfMovesY))
+                    {
+                        whiteTurn = !whiteTurn;
+                    }
+                    
+                }
+                else if (highlightedPiece.transform.tag == "Queen")
+                {
+                    if (MoveQueen(numberOfMovesX, numberOfMovesY))
+                    {
+                        whiteTurn = !whiteTurn;
+                    }
+                }
+                else if (highlightedPiece.transform.tag == "WhitePawn")
+                {
+                    if(MoveWhitePawn(numberOfMovesX, numberOfMovesY))
+                    {
+                        if (!usedPieces.Contains(highlightedPiece))
+                        {
+                            usedPieces[numberOfPawnsMoved] = highlightedPiece;
+                            numberOfPawnsMoved++;
+                        }
+                        Debug.Log("White");
+                        whiteTurn = !whiteTurn;
+                    }
+                }
+                else if (highlightedPiece.transform.tag == "BlackPawn")
+                {
+                    if (MoveBlackPawn(numberOfMovesX, numberOfMovesY))
+                    {
+                        if (!usedPieces.Contains(highlightedPiece))
+                        {
+                            usedPieces[numberOfPawnsMoved] = highlightedPiece;
+                            numberOfPawnsMoved++;
+                        }
+                        Debug.Log("Black");
+                        whiteTurn = !whiteTurn;
+                    }
+                }
+                else if (highlightedPiece.transform.tag == "Bishop")
+                {
+                    if (MoveBishop(numberOfMovesX, numberOfMovesY))
+                    {
+                        whiteTurn = !whiteTurn;
+                    }
+                }
+                else if (highlightedPiece.transform.tag == "Knight")
+                {
+                    if (MoveKnight(numberOfMovesX, numberOfMovesY))
+                    {
+                        whiteTurn = !whiteTurn;
+                    }
+                }
+                else if (highlightedPiece.transform.tag == "King")
+                {
+                    if (MoveKing(numberOfMovesX, numberOfMovesY))
+                    {
+                        whiteTurn = !whiteTurn;
+                    }
+                }
+                highlightedPiece = null;
             }
-            numberOfMovesX--;
-            numberOfMovesY--;
-            if (highlightedPiece.transform.tag == "Rook")
-            {
-                MoveRook(numberOfMovesX, numberOfMovesY);
-            }
-            else if (highlightedPiece.transform.tag == "Queen")
-            {
-                MoveQueen(numberOfMovesX, numberOfMovesY);
-            }
-            else if (highlightedPiece.transform.tag == "WhitePawn")
-            {
-                MoveWhitePawn(numberOfMovesX, numberOfMovesY);
-            }
-            else if (highlightedPiece.transform.tag == "BlackPawn")
-            {
-                MoveBlackPawn(numberOfMovesX, numberOfMovesY);
-            }
-            else if (highlightedPiece.transform.tag == "Bishop")
-            {
-                MoveBishop(numberOfMovesX, numberOfMovesY);
-            }
-            else if(highlightedPiece.transform.tag == "Knight")
-            {
-                MoveKnight(numberOfMovesX, numberOfMovesY);
-            }
-            else if(highlightedPiece.transform.tag == "King")
-            {
-                MoveKing(numberOfMovesX, numberOfMovesY);
-            }
-            highlightedPiece = null;
+            correctPlayer = false;
+           
         }
         // CheckForCheck();
         if (CheckForWin())
@@ -443,8 +494,8 @@ public class Board : MonoBehaviour
     {
         coords = GetPieceCoords();
         newCoords = coords;
-        Debug.Log(numberOfMovesX);
-        Debug.Log(numberOfMovesY);
+      //  Debug.Log(numberOfMovesX);
+       // Debug.Log(numberOfMovesY);
         if(numberOfMovesX == 0 && numberOfMovesY == 0)
         {
             return false;
@@ -539,7 +590,7 @@ public class Board : MonoBehaviour
         newCoords = coords;
        // Debug.Log(numberOfMovesX);
        // Debug.Log(numberOfMovesY);
-        Debug.Log((float)numberOfMovesX / numberOfMovesY != 2f || (float)numberOfMovesY / numberOfMovesX != 2f);
+      //  Debug.Log((float)numberOfMovesX / numberOfMovesY != 2f || (float)numberOfMovesY / numberOfMovesX != 2f);
         if((float) numberOfMovesX/numberOfMovesY != 2f && (float) numberOfMovesY/numberOfMovesX != 2f)
         {
             return false;
@@ -630,8 +681,8 @@ public class Board : MonoBehaviour
     {
         coords = GetPieceCoords();
         newCoords = coords;
-        Debug.Log(numberOfMovesX);
-        Debug.Log(numberOfMovesY);
+       // Debug.Log(numberOfMovesX);
+      //  Debug.Log(numberOfMovesY);
         if(numberOfMovesX != numberOfMovesY)
         {
             return false;
@@ -708,14 +759,55 @@ public class Board : MonoBehaviour
 
     bool MoveWhitePawn(int numberOfMovesX, int numberOfMovesY)
     {
-        Debug.Log(numberOfMovesX);
-        Debug.Log(numberOfMovesY);
+        // Debug.Log(numberOfMovesX);
+        //  Debug.Log(numberOfMovesY);
+        Vector2Int coords = GetPieceCoords();
         if (!usedPieces.Contains(highlightedPiece))
         {
             if (numberOfMovesY > 2)
             {
                 return false;
             }
+        }
+        if (yPos)
+        {
+            return false;
+        }
+        if(numberOfMovesY == 0)
+        {
+            return false;
+        }
+        if (highlightedPiece != null)
+        {
+            if (!yPos && !xPos && board[coords.x + numberOfMovesY, coords.y + numberOfMovesX] != null)
+            {
+                if (highlightedPiece.transform.name.Contains("White") && board[coords.x + numberOfMovesY, coords.y + numberOfMovesX].transform.name.Contains("White"))
+                {
+                    return false;
+                }
+            }
+            else if (yPos && !xPos && board[coords.x - numberOfMovesY, coords.y + numberOfMovesX] != null)
+            {
+                if (highlightedPiece.transform.name.Contains("White") && board[coords.x - numberOfMovesY, coords.y + numberOfMovesX].transform.name.Contains("White"))
+                {
+                    return false;
+                }
+            }
+            else if (!yPos && xPos && board[coords.x + numberOfMovesY, coords.y - numberOfMovesX] != null)
+            {
+                if (highlightedPiece.transform.name.Contains("White") && board[coords.x + numberOfMovesY, coords.y - numberOfMovesX].transform.name.Contains("White"))
+                {
+                    return false;
+                }
+            }
+            else if (yPos && xPos && board[coords.x - numberOfMovesY, coords.y - numberOfMovesX] != null)
+            {
+                if (highlightedPiece.transform.name.Contains("White") && board[coords.x - numberOfMovesY, coords.y - numberOfMovesX].transform.name.Contains("White"))
+                {
+                    return false;
+                }
+            }
+
         }
         else
         {
@@ -724,33 +816,40 @@ public class Board : MonoBehaviour
                 return false;
             }
         }
-        if (!usedPieces.Contains(highlightedPiece))
-        {
-            usedPieces[numberOfPawnsMoved] = highlightedPiece;
-            numberOfPawnsMoved++;
-        }
         if (numberOfMovesY == 1 && numberOfMovesX == 1)
         {
             if (!xPos)
             {
-                Vector2Int coords = GetPieceCoords();
+                coords = GetPieceCoords();
                 if (board[coords.x + 1, coords.y + 1] != null)
                 {
                     TakePiece(new Vector2Int(coords.x + 1, coords.y + 1));
                     board[coords.x, coords.y] = null;
                     board[coords.x + 1, coords.y + 1] = highlightedPiece;
                     highlightedPiece.transform.position = new Vector2(highlightedPiece.transform.position.x + distanceForCellX, highlightedPiece.transform.position.y + distanceForCellY);
+                    return true;
+                }
+                else
+                {
+                    //   Debug.Log("Yo");
+                    return false;
                 }
             }
             else
             {
-                Vector2Int coords = GetPieceCoords();
+                coords = GetPieceCoords();
                 if (board[coords.x + 1, coords.y - 1] != null)
                 {
                     TakePiece(new Vector2Int(coords.x + 1, coords.y - 1));
                     board[coords.x, coords.y] = null;
                     board[coords.x + 1, coords.y - 1] = highlightedPiece;
                     highlightedPiece.transform.position = new Vector2(highlightedPiece.transform.position.x - distanceForCellX, highlightedPiece.transform.position.y + distanceForCellY);
+                    return true;
+                }
+                else
+                {
+                    //   Debug.Log("Yo");
+                    return false;
                 }
             }
         }
@@ -762,9 +861,9 @@ public class Board : MonoBehaviour
         {
             for (int i = 0; i < numberOfMovesY; i++)
             {
-                Vector2Int coords = GetPieceCoords();
-                Debug.Log(coords);
-                Debug.Log(board[coords.x + 1, coords.y]);
+                coords = GetPieceCoords();
+            //    Debug.Log(coords);
+             //   Debug.Log(board[coords.x + 1, coords.y]);
                 if (board[coords.x + 1, coords.y] == null)
                 {
                     highlightedPiece.transform.position = new Vector2(highlightedPiece.transform.position.x, highlightedPiece.transform.position.y + distanceForCellY);
@@ -782,33 +881,85 @@ public class Board : MonoBehaviour
 
     bool MoveBlackPawn(int numberOfMovesX, int numberOfMovesY)
     {
-        Debug.Log(numberOfMovesY);
+        //  Debug.Log(numberOfMovesY);
+        Vector2Int coords = GetPieceCoords();
         if (numberOfMovesY > 2)
         {
             return false;
+        }
+        if (!yPos)
+        {
+            return false;
+        }
+        if (numberOfMovesY == 0)
+        {
+            return false;
+        }
+        if (highlightedPiece != null)
+        {
+            if (!yPos && !xPos && board[coords.x + numberOfMovesY, coords.y + numberOfMovesX] != null)
+            {
+                if (highlightedPiece.transform.name.Contains("Black") && board[coords.x + numberOfMovesY, coords.y + numberOfMovesX].transform.name.Contains("Black"))
+                {
+                    return false;
+                }
+            }
+            else if (yPos && !xPos && board[coords.x - numberOfMovesY, coords.y + numberOfMovesX] != null)
+            {
+                if (highlightedPiece.transform.name.Contains("Black") && board[coords.x - numberOfMovesY, coords.y + numberOfMovesX].transform.name.Contains("Black"))
+                {
+                    return false;
+                }
+            }
+            else if (!yPos && xPos && board[coords.x + numberOfMovesY, coords.y - numberOfMovesX] != null)
+            {
+                if (highlightedPiece.transform.name.Contains("Black") && board[coords.x + numberOfMovesY, coords.y - numberOfMovesX].transform.name.Contains("Black"))
+                {
+                    return false;
+                }
+            }
+            else if (yPos && xPos && board[coords.x - numberOfMovesY, coords.y - numberOfMovesX] != null)
+            {
+                if (highlightedPiece.transform.name.Contains("Black") && board[coords.x - numberOfMovesY, coords.y - numberOfMovesX].transform.name.Contains("Black"))
+                {
+                    return false;
+                }
+            }
+
         }
         if (numberOfMovesY == 1 && numberOfMovesX == 1)
         {
             if (xPos)
             {
-                Vector2Int coords = GetPieceCoords();
+                coords = GetPieceCoords();
                 if (board[coords.x - 1, coords.y - 1] != null)
                 {
                     TakePiece(new Vector2Int(coords.x - 1, coords.y - 1));
                     board[coords.x, coords.y] = null;
                     board[coords.x - 1, coords.y - 1] = highlightedPiece;
                     highlightedPiece.transform.position = new Vector2(highlightedPiece.transform.position.x - distanceForCellX, highlightedPiece.transform.position.y - distanceForCellY);
+                    return true;
+                }
+                else
+                {
+                 //   Debug.Log("Yo");
+                    return false;
                 }
             }
             else
             {
-                Vector2Int coords = GetPieceCoords();
-                if (board[coords.x - 1, coords.y + 1] != null)
+                coords = GetPieceCoords();
+                if (board[coords.x - 1, coords.y + 1] != null && !board[coords.x - 1, coords.y + 1].transform.name.Contains("Black"))
                 {
                     TakePiece(new Vector2Int(coords.x - 1, coords.y + 1));
                     board[coords.x, coords.y] = null;
                     board[coords.x - 1, coords.y + 1] = highlightedPiece;
                     highlightedPiece.transform.position = new Vector2(highlightedPiece.transform.position.x + distanceForCellX, highlightedPiece.transform.position.y - distanceForCellY);
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
         }
@@ -820,9 +971,9 @@ public class Board : MonoBehaviour
         {
             for (int i = 0; i < numberOfMovesY; i++)
             {
-                Vector2Int coords = GetPieceCoords();
-                Debug.Log(coords);
-                Debug.Log(board[coords.x - 1, coords.y]);
+                coords = GetPieceCoords();
+             //   Debug.Log(coords);
+             //   Debug.Log(board[coords.x - 1, coords.y]);
                 if (board[coords.x - 1, coords.y] == null)
                 {
                     highlightedPiece.transform.position = new Vector2(highlightedPiece.transform.position.x, highlightedPiece.transform.position.y - distanceForCellY);
@@ -835,6 +986,12 @@ public class Board : MonoBehaviour
             }
         }
         return true;
+    }
+
+    void ShowPossiblePawnMove()
+    {
+        coords = GetPieceCoords();
+
     }
 
     void TakePiece(Vector2Int coords)
@@ -856,8 +1013,8 @@ public class Board : MonoBehaviour
                         board[x, y] = null;
                        // Debug.Log(x);
                        // Debug.Log(y);
-                        Debug.Log(x + numberOfMovesX);
-                        Debug.Log(y + numberOfMovesY);
+                      //  Debug.Log(x + numberOfMovesX);
+                      //  Debug.Log(y + numberOfMovesY);
                         board[x + numberOfMovesX, y + numberOfMovesY] = highlightedPiece;
                         return true;
                     }
@@ -887,18 +1044,43 @@ public class Board : MonoBehaviour
 
     public void ClickPiece(GameObject piece)
     {
+ 
         if (whiteTurn && piece.transform.name.Contains("White"))
         {
-            takenPiece = false;
-            highlightedPiece = piece;
-            whiteTurn = false;
+         //   whiteTurn = false;
+            correctPlayer = true;
         }
-        else if(!whiteTurn && piece.transform.name.Contains("Black"))
+        if (!whiteTurn && piece.transform.name.Contains("Black"))
         {
-            takenPiece = false;
-            highlightedPiece = piece;
-            whiteTurn = true;
+        //    whiteTurn = true;
+            correctPlayer = true;
+                
         }
+        takenPiece = false;
+        highlightedPiece = piece;
+
+        /*   if (highlightedPiece != null)
+           {
+               if((highlightedPiece.transform.name.Contains("White") && piece.transform.name.Contains("Black")))
+               {
+                   takenPiece = false;
+                   highlightedPiece = piece;
+               }
+               else if ((highlightedPiece.transform.name.Contains("Black") && piece.transform.name.Contains("White")))
+               {
+                   takenPiece = false;
+                   highlightedPiece = piece;
+               }
+               else
+               {
+                   highlightedPiece = null;
+               }
+           }
+           else
+           {
+               takenPiece = false;
+               highlightedPiece = piece;
+           }*/
     }
 
     //  var highlight = Instantiate(highlightPrefab, new Vector3(highlightedPiece.transform.position.x, highlightedPiece.transform.position.y + distanceForCellX * i, 0f), Quaternion.identity);
